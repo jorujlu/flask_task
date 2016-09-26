@@ -42,7 +42,8 @@ def gists_for_user(username):
             username=username)
     response = requests.get(gists_url)
     # BONUS: What failures could happen?
-    # BONUS: Paging? How does this work for users with tons of gists?
+    # BONUS: Paging? How does this work for users with tons of gists? If truncated key is true then the file is too large and some part of the content is returned.
+    #                If the top level trunated key is true then 300 file will be returned. In order to get all the files you have copy the gist via "git_pull_url"
 
     return response.json()
 
@@ -61,8 +62,10 @@ def search():
     """
     post_data = request.get_json()
     # BONUS: Validate the arguments?
-
     username = post_data['username']
+    valid = re.match('^[\w-]+$', username)
+    if valid is None:
+        print("not passed")
     pattern = post_data['pattern']
 
     result = {}
